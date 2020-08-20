@@ -6,14 +6,17 @@ use, intrinsic:: iso_fortran_env, only: stderr=>error_unit
 use phys_consts, only : lsp, wp
 !! code needs to know how many species are being used.
 
-use mpi, only: mpi_init, mpi_comm_rank, mpi_comm_size, mpi_comm_world, &
-  mpi_integer,mpi_sum, &
-  mpi_status_size, mpi_status_ignore, MPI_PROC_NULL, &
-  mpi_realprec=>@mpi_realprec@
+! use mpi, only: mpi_init, mpi_comm_rank, mpi_comm_size, mpi_comm_world, &
+!   mpi_integer,mpi_sum, &
+!   mpi_status_size, mpi_status_ignore, MPI_PROC_NULL, &
+!   mpi_realprec=>@mpi_realprec@
 
-implicit none (type, external)
+implicit none !(type, external)
+
+include 'mpif.h'
+
 private
-public :: mpi_tag, myid, myid2, myid3, lid, lid2, lid3, &
+public :: gemini_mpi, myid, myid2, myid3, lid, lid2, lid3, &
   mpi_realprec, mpisetup, mpibreakdown, mpi_manualgrid, mpigrid, id2grid, grid2id, slabinds, &
   bcast_send,  bcast_send1d_2, bcast_send1d_3, bcast_send3d_x2i, bcast_send3d_x3i, bcast_send3d_ghost, &
   bcast_recv, bcast_recv1d_2, bcast_recv1d_3, bcast_recv3d_x2i, bcast_recv3d_x3i, bcast_recv3d_ghost, &
@@ -22,9 +25,10 @@ public :: mpi_tag, myid, myid2, myid3, lid, lid2, lid3, &
   mpi_comm_world, mpi_status_ignore, mpi_integer, mpi_sum, &
   test_process_number
 
-external :: mpi_finalize, mpi_send, mpi_recv, mpi_isend, mpi_irecv, mpi_waitall
+!external :: mpi_finalize, mpi_send, mpi_recv, mpi_isend, mpi_irecv, mpi_waitall
 
-type :: mpi_tags
+integer, parameter :: mpi_realprec = @mpi_realprec@
+type :: gemini_mpi_tags
 
 integer :: ns=2, vs1=3, Ts=4
 !! root/workers input routines.  also output routines for root/worker
@@ -90,9 +94,9 @@ integer :: Tninf=98
 integer :: xnrange=99,ynrange=104
 integer :: lx=105,xn=106,yn=107,zn=108,dvnx=109
 
-end type mpi_tags
+end type gemini_mpi_tags
 
-type(mpi_tags), protected :: mpi_tag
+type(gemini_mpi_tags), protected :: gemini_mpi
 
 !> A LIST OF TAGS SO THESE DO NOT NEED TO BE EMBEDDED IN EACH SUBROUTINE
 

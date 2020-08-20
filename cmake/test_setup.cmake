@@ -9,8 +9,14 @@ if(python_ok AND hdf5)
 
   win32_hdf5_env()
 
+  if(no_mpi)
+    set(_cmd ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_test.py ${testname} $<TARGET_FILE:gemini.bin> ${_outdir})
+  else()
+    set(_cmd ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_test.py ${testname} -mpiexec ${MPIEXEC_EXECUTABLE} $<TARGET_FILE:gemini.bin> ${_outdir})
+  endif()
+
   add_test(NAME gemini:hdf5:${testname}:dryrun
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_test.py ${testname} ${MPIEXEC_EXECUTABLE} $<TARGET_FILE:gemini.bin> ${_outdir} -dryrun
+    COMMAND ${_cmd} -dryrun
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
     # NOTE: Working_Diretory is NECESSARY for Windows + Intel + HDF5
 

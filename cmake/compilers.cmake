@@ -38,8 +38,11 @@ if(NOT f2008submodule)
 endif()
 
 if(no_mpi)
-  message(WARNING "Skipping all MPI portions (most of Gemini) per user no_mpi=true")
-  set(MPI_OK false)
+  set(MPI_OK true)
+  add_subdirectory(src/vendor/mpi_stubs)
+  add_library(MPI::MPI_Fortran ALIAS mpiseq)
+  add_library(MPI::MPI_C ALIAS mpiseq)
+  add_library(SCALAPACK::SCALAPACK ALIAS mpiseq)
   return()
 endif()
 
