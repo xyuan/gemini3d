@@ -53,7 +53,7 @@ if(NOT MPI_C_OK)
 endif()
 
 if(MPI_C_OK AND MPI_Fortran_OK)
-  set(MPI_OK true BOOL CACH "MPI OK")
+  set(MPI_OK true BOOL CACHE "MPI OK")
 else()
   set(MPI_OK false BOOL CACHE "MPI Not OK")
 endif()
